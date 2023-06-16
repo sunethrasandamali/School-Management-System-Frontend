@@ -44,7 +44,7 @@ const Student = ({ addstudents }) => {
         setIsOpen(!isOpen);
     }
 
-    const handleSubmit = (e) => {
+        const handleSubmit = (e) => {
             e.preventDefault();
             //addstudents({ firstname, lastname, contactperson, contactno });
             const data = {

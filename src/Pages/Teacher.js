@@ -15,7 +15,28 @@ const Teacher = ({ addTeacher }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addTeacher({ firstname, lastname, contactno, email });
+        const data = {
+            FirstName: firstname,
+            LastName: lastname,
+            ContactNo: contactno,
+            Email: email
+        }
+
+        axios.post(`${endpoints.API_URL}/Teacher`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            console.log(response);
+            // Handle successful response
+            //setData(response.data);
+        })
+        .catch(error => {
+            // Handle error
+            console.error(error);
+        });
+        
         setFirstName('');
         setLastName('');
         setContactNo('');
