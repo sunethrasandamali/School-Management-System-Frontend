@@ -4,6 +4,7 @@ import './interface.scss';
 import { FaAsterisk, FaCube, FaSortDown } from 'react-icons/fa';
 import axios from 'axios';
 import { endpoints } from '../EndPoints';
+import StudentReport from './StudentReport';
 
 //calculate the age
 function calculateAge(dateOfBirth) {
@@ -40,6 +41,11 @@ const Student = ({ addstudents }) => {
 
     const [data, setData] = useState([]);
     const [selectedValue, setSelectedValue] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+
+    const togglePopup = () => {
+      setIsOpen(!isOpen);
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -246,6 +252,10 @@ const Student = ({ addstudents }) => {
                             </Col>
                             <Col md={3}>
                                 <Button className='button' type="button" color="secondary">Reset</Button>
+                            </Col>
+                            <Col md={3}>
+                                <Button className='allocate-button' type="button"  onClick={togglePopup}>View Student Details Report</Button>
+                                <StudentReport isOpen={isOpen} togglePopup={togglePopup} />
                             </Col>
                         </Row>
 
