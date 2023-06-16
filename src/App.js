@@ -1,24 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
+import  Subject  from './Pages/Subject';
+import  Classroom  from './Pages/Classroom';
+import  Student  from './Pages/Student'; //for use the created components
+import  Teacher  from './Pages/Teacher';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import  Navigation  from './Pages/Navigation/Navigation';
 
 function App() {
+
+  const relatedPage = 'Related Page';
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+     <Router>
+      <div className="App container">
+        
+      <Navigation relatedPageName={relatedPage} />
+        <Routes>
+          <Route path='/student' element={<Student/>} />
+          <Route path='/teacher' element={<Teacher/>} />
+          <Route path='/subject' element={<Subject/>} />
+          <Route path='/classroom' element={<Classroom/>} />
+        </Routes>
+
+      <footer className='footer'></footer>
+       
+    
+
+      </div>
+     </Router>
+
   );
 }
 

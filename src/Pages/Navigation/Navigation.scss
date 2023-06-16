@@ -1,0 +1,34 @@
+//Navigation.scss
+
+.navigation {
+ // margin-top: 5px;
+  //z-index: 9999;
+  //background-color: #46b43c;
+
+  // .nav-link {
+  //   color: #ffffff;
+
+    // &:hover {
+    //   //color: #f70303;
+    // }
+  //}
+}
+
+.drawer-icon,
+.profile-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.related-navbar {
+  margin-top: 10px; /* Adjust the value to create space between the navigation and related navigation bars */
+}
+
+.related-navbar .nav-link {
+  color: #ffffff;
+  /* Add additional styles as needed */
+}
+
+
+  

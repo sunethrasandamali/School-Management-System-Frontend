@@ -1,0 +1,23 @@
+// index.scss
+
+$primary-color: #000000;
+$secondary-color: #ffffff;
+
+body {
+  background-color: $secondary-color;
+  font-style: $primary-color;
+}
+
+.title {
+  color: $primary-color;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.footer{
+    background-color: #46b43c;
+    color: $primary-color;
+    font-size: 15px;
+    text-align: center;
+    height: 30px;
+}
