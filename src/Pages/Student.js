@@ -26,9 +26,6 @@ function calculateAge(dateOfBirth) {
 };
 
 
-
-//
-
 const Student = ({ addstudents }) => {
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
@@ -44,27 +41,27 @@ const Student = ({ addstudents }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const togglePopup = () => {
-      setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        //addstudents({ firstname, lastname, contactperson, contactno });
-        const data = {
-            FirstName: firstname,
-            LastName: lastname,
-            contactperson: contactperson,
-            ContactNo: contactno,
-            SEmail: email,
-            DOB: dob,
-            Age: age,
-            ClassroomID: parseInt(selectedValue,10) 
-        }
-        axios.post(`${endpoints.API_URL}/Student`, data, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
+            e.preventDefault();
+            //addstudents({ firstname, lastname, contactperson, contactno });
+            const data = {
+                FirstName: firstname,
+                LastName: lastname,
+                contactperson: contactperson,
+                ContactNo: contactno,
+                SEmail: email,
+                DOB: dob,
+                Age: age,
+                ClassroomID: parseInt(selectedValue, 10)
+            }
+            axios.post(`${endpoints.API_URL}/Student`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
             .then(response => {
                 console.log(response);
                 // Handle successful response
@@ -74,57 +71,58 @@ const Student = ({ addstudents }) => {
                 // Handle error
                 console.error(error);
             });
-        setFirstName('');
-        setLastName('');
-        setContactPerson('');
-        setContactNo('');
-        setEmail('');
-        setDOB('');
-        setAge('');
-        setClassRoom('');
-    };
+            
+            setFirstName('');
+            setLastName('');
+            setContactPerson('');
+            setContactNo('');
+            setEmail('');
+            setDOB('');
+            setAge('');
+            setClassRoom('');
+        };
 
-    const handleDobChange = (e) => {
-        setDOB(e.target.value);
-        const calculatedAge = calculateAge(e.target.value);
-        setAge(calculatedAge);
-    };
+        const handleDobChange = (e) => {
+            setDOB(e.target.value);
+            const calculatedAge = calculateAge(e.target.value);
+            setAge(calculatedAge);
+        };
 
 
 
 
-    useEffect(() => {
-        fetchData();
-        fetchClassroomData();
-    }, []);
+        useEffect(() => {
+            fetchData();
+            fetchClassroomData();
+        }, []);
 
-    const fetchData = () => {
-        axios.get(`${endpoints.API_URL}/Student`)
-            .then(response => {
-                console.log(response);
-                // Handle successful response
-                setData(response.data);
-            })
-            .catch(error => {
-                // Handle error
-                console.error(error);
-            });
-    }
-
-    //fetch data to the dropdown list
-    const handleSelectChange = (e) => {
-        setSelectedValue(e.target.value);
-        console.log("dropvalues:" + e.target.value);
-    };
-
-    const fetchClassroomData = async () => {
-        try {
-            const response = await axios.get(`${endpoints.API_URL}/Classroom`);
-            setData(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        const fetchData = () => {
+            axios.get(`${endpoints.API_URL}/Student`)
+                .then(response => {
+                    console.log(response);
+                    // Handle successful response
+                    setData(response.data);
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error(error);
+                });
         }
-    };
+
+        //fetch data to the dropdown list
+        const handleSelectChange = (e) => {
+            setSelectedValue(e.target.value);
+            console.log("dropvalues:" + e.target.value);
+        };
+
+        const fetchClassroomData = async () => {
+            try {
+                const response = await axios.get(`${endpoints.API_URL}/Classroom`);
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
 
     return (
@@ -231,7 +229,7 @@ const Student = ({ addstudents }) => {
                             <Col md={6}>
                                 <FormGroup className='form-group'>
                                     <Label for="classsroom">Classroom:<FaAsterisk className="required-icon" /></Label>
-                                        <select id="dropdown" value={selectedValue} onChange={handleSelectChange}>
+                                    <select id="dropdown" value={selectedValue} onChange={handleSelectChange}>
                                         <option value=""> Select your class </option>
                                         {data.map((item) => (
                                             <option key={item.id} value={item.ClassroomID}>
@@ -254,7 +252,7 @@ const Student = ({ addstudents }) => {
                                 <Button className='button' type="button" color="secondary">Reset</Button>
                             </Col>
                             <Col md={3}>
-                                <Button className='allocate-button' type="button"  onClick={togglePopup}>View Student Details Report</Button>
+                                <Button className='allocate-button' type="button" onClick={togglePopup}>View Student Details Report</Button>
                                 <StudentReport isOpen={isOpen} togglePopup={togglePopup} />
                             </Col>
                         </Row>
@@ -293,31 +291,6 @@ const Student = ({ addstudents }) => {
                                     <td>{student.ContactNo}</td>
                                 </tr>
                             ))}
-
-                            {/* <tr>
-                                <td>Naduni</td>
-                                <td>Sankalpana</td>
-                                <td>Mr.Kumara</td>
-                                <td>0712067543</td>
-                            </tr>
-                            <tr>
-                                <td>Hirusha</td>
-                                <td>Madhawa</td>
-                                <td>Ms.Sachithra</td>
-                                <td>0776954356</td>
-                            </tr>
-                            <tr>
-                                <td>Naduni</td>
-                                <td>Sankalpana</td>
-                                <td>Mr.Kumara</td>
-                                <td>0712067543</td>
-                            </tr>
-                            <tr>
-                                <td>Hirusha</td>
-                                <td>Madhawa</td>
-                                <td>Ms.Sachithra</td>
-                                <td>0776954356</td>
-                            </tr> */}
                         </tbody>
                     </Table>
                 </CardBody>

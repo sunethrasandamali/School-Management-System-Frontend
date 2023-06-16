@@ -3,7 +3,8 @@ import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Row, 
 import './interface.scss';
 import { FaAsterisk, FaCube, FaSortDown } from 'react-icons/fa';
 import AllocateSubjectPopup from './AlllocateSubject';
-
+import axios from 'axios';
+import { endpoints } from '../EndPoints';
 
 const Subject = ({ addSubject }) => {
     const [subjectname, setSubjectName] = useState('');
@@ -11,6 +12,7 @@ const Subject = ({ addSubject }) => {
     const [contactno, setContactNo] = useState('');
     const [email, setEmail] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [data,setData] = useState([]);
 
     const togglePopup = () => {
       setIsOpen(!isOpen);
@@ -26,6 +28,23 @@ const Subject = ({ addSubject }) => {
 
     };
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        axios.get(`${endpoints.API_URL}/Subject`)
+            .then(response => {
+                console.log(response);
+
+                // Handle successful response
+                setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+    }
 
     return (
 
@@ -90,39 +109,16 @@ const Subject = ({ addSubject }) => {
                         <thead>
                             <tr>
                                 <th>Subject Name</th>
-                                {/* <th>Last Name</th>
-                                <th>Contact No</th>
-                                <th>Email</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>English</td>
-                                {/* <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td> */}
-                            </tr>
-                            <tr>
-                                <td>Sinhala</td>
-                                {/* <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
-                            <tr>
-                                <td>Tamil</td>
-                                {/* <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
-                            <tr>
-                                <td>Mathematics</td>
-                                {/* <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
+                        {data.map((subject, index) => (
+                              
+                              <tr key={index}>
+                                  <td>{subject.SubjectName}</td>
+                               
+                              </tr>
+                          ))}
                         </tbody>
                     </Table>
                 </CardBody>

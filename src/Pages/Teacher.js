@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Row, Col, Container, Table } from 'reactstrap';
 import './interface.scss';
 import { FaAsterisk, FaCube, FaSortDown } from 'react-icons/fa';
-
+import axios from 'axios';
+import { endpoints } from '../EndPoints';
 
 const Teacher = ({ addTeacher }) => {
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
     const [contactno, setContactNo] = useState('');
     const [email, setEmail] = useState('');
+    const [data,setData] = useState([]);
 
 
     const handleSubmit = (e) => {
@@ -21,6 +23,23 @@ const Teacher = ({ addTeacher }) => {
 
     };
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        axios.get(`${endpoints.API_URL}/Teacher`)
+            .then(response => {
+                console.log(response);
+
+                // Handle successful response
+                setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+    }
 
     return (
 
@@ -122,33 +141,16 @@ const Teacher = ({ addTeacher }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Naduni</td>
-                                <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>Hirusha</td>
-                                <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td>
-                                
-                            </tr>
-                            <tr>
-                                <td>Naduni</td>
-                                <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td>
-                                
-                            </tr>
-                            <tr>
-                                <td>Hirusha</td>
-                                <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td>
-                                
-                            </tr>
+                            {data.map((teacher, index) => (
+                                console.log("Teacher:" + teacher),
+                                <tr key={index}>
+                                    <td>{teacher.FirstName}</td>
+                                    <td>{teacher.LastName}</td>
+                                    <td>{teacher.ContactNo}</td>
+                                    <td>{teacher.Email}</td>
+                                </tr>
+                            ))}
+                           
                         </tbody>
                     </Table>
                 </CardBody>

@@ -3,7 +3,8 @@ import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Row, 
 import './interface.scss';
 import { FaAsterisk, FaCube, FaSortDown } from 'react-icons/fa';
 import AllocateClassroomPopup from './AlllocateClassroom';
-
+import axios from 'axios';
+import { endpoints } from '../EndPoints';
 
 const Classroom = ({ addClassroom }) => {
     const [classroomname, setClassroomName] = useState('');
@@ -11,9 +12,10 @@ const Classroom = ({ addClassroom }) => {
     const [contactno, setContactNo] = useState('');
     const [email, setEmail] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [data, setData] = useState([]);
 
     const togglePopup = () => {
-      setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     }
 
     const handleSubmit = (e) => {
@@ -26,7 +28,23 @@ const Classroom = ({ addClassroom }) => {
 
     };
 
-   
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        axios.get(`${endpoints.API_URL}/Classroom`)
+            .then(response => {
+                console.log(response);
+
+                // Handle successful response
+                setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+    }
 
 
     return (
@@ -54,7 +72,7 @@ const Classroom = ({ addClassroom }) => {
                                         required />
                                 </FormGroup>
                             </Col>
-                            
+
                         </Row>
 
                         <Row>
@@ -92,39 +110,16 @@ const Classroom = ({ addClassroom }) => {
                         <thead>
                             <tr>
                                 <th>Classroom Name</th>
-                                {/* <th>Last Name</th>
-                                <th>Contact No</th>
-                                <th>Email</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Grade 6A</td>
-                                {/* <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td> */}
-                            </tr>
-                            <tr>
-                                <td>Grade 6B</td>
-                                {/* <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
-                            <tr>
-                                <td>Grade 6C</td>
-                                {/* <td>Sankalpana</td>
-                                <td>0712067543</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
-                            <tr>
-                                <td>Grade 6D</td>
-                                {/* <td>Madhawa</td>
-                                <td>0776954356</td>
-                                <td>example@gmail.com</td> */}
-                                
-                            </tr>
+                            {data.map((classroom, index) => (
+                              
+                                <tr key={index}>
+                                    <td>{classroom.ClassroomName}</td>
+                                 
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                 </CardBody>
