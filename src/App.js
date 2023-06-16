@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import  Subject  from './Pages/Subject';
 import  Classroom  from './Pages/Classroom';
 import  Student  from './Pages/Student'; //for use the created components
