@@ -4,6 +4,7 @@ import  Subject  from './Pages/Subject';
 import  Classroom  from './Pages/Classroom';
 import  Student  from './Pages/Student'; //for use the created components
 import  Teacher  from './Pages/Teacher';
+import Home from './Pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import  Navigation  from './Pages/Navigation/Navigation';
 
@@ -17,6 +18,7 @@ function App() {
         
       <Navigation relatedPageName={relatedPage} />
         <Routes>
+          <Route path='/' element={<Home/>} />
           <Route path='/student' element={<Student/>} />
           <Route path='/teacher' element={<Teacher/>} />
           <Route path='/subject' element={<Subject/>} />

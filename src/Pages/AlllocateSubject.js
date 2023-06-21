@@ -1,39 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Card, CardHeader, CardBody, Row, Col, Label, Table } from 'reactstrap';
 import { FaWindowMinimize, FaWindowMaximize, FaWindowClose } from 'react-icons/fa';
-
+import axios from 'axios';
+import { endpoints } from '../EndPoints';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import './popup.scss'; // Custom styles for the popup
 
-//fetch data to the dropdown list
-// useEffect(() => {
-//     fetchData();
-// }, []);
-
-// const fetchData = async () => {
-//     try {
-//         const response = await axios.get('api_endpoint');
-//         setData(response.data);
-//     } catch (error) {
-//         console.error('Error fetching data:', error);
-//     }
-// };
-
-// const handleSelectChange = (e) => {
-//     setSelectedValue(e.target.value);
-// };
-
-//
-
-
-
-
-
 const AllocateSubjectPopup = ({ isOpen, togglePopup }) => {
-
-
     const [data, setData] = useState([]);
-    const [selectedValue, setSelectedValue] = useState('');
+    const [selectedTeacherValue, setSelectedTeacherValue] = useState('');
+    const [selectedSubjectValue, setSelectedSubjectValue] = useState('');
+
+    useEffect(() => {
+        fetchTeacherData();
+        fetchSubjectData();
+    }, []);
+
+    //fetch data to teacher dropdown list
+    const handleSelectTeacherChange = (e) => {
+        setSelectedTeacherValue(e.target.value);
+        console.log("dropvalues:" + e.target.value);
+    };
+
+    const handleSelectSubjectChange = (e) => {
+        setSelectedSubjectValue(e.target.value);
+    }
+
+    const fetchTeacherData = async () => {
+        try {
+            const response = await axios.get(`${endpoints.API_URL}/Teacher`);
+            setData(response.data);
+            console.log('T:', response);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+      //fetch data to subject dropdown list
+    const fetchSubjectData = async () => {
+        try {
+            const response = await axios.get(`${endpoints.API_URL}/Subject`);
+            setData(response.data);
+            console.log('S:', response);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
     return (
 
@@ -51,21 +63,22 @@ const AllocateSubjectPopup = ({ isOpen, togglePopup }) => {
                         </CardHeader>
 
                         <CardBody>
-                 
+
                             <div className='card-body-content'>
-                            <p>Teachers Details:</p>
+                                <p>Teachers Details:</p>
                                 <Row>
 
 
 
                                     <Col md={6}>
                                         <Label>Teacher </Label>
-                                        <select id="dropdown" className='dropdown'>
-                                            {/* <select id="dropdown" value={selectedValue} onChange={handleSelectChange}> */}
+
+                                        <select id="dropdown" className='dropdown' value={selectedTeacherValue} onChange={handleSelectTeacherChange}>
                                             <option value=" "> Select a Teacher </option>
                                             {data.map((item) => (
+                                               //  console.log('full',item.FirstName, item.LastName),
                                                 <option key={item.id} value={item.id}>
-                                                    {item.name}
+                                                    {item.FirstName}
                                                 </option>
                                             ))}
                                         </select>
@@ -80,19 +93,19 @@ const AllocateSubjectPopup = ({ isOpen, togglePopup }) => {
                             </div>
 
                             <div className='card-body-content'>
-                            <p>Allocated Subjects:</p>
+                                <p>Allocated Subjects:</p>
                                 <Row>
 
 
 
                                     <Col md={6}>
                                         <Label>Subject </Label>
-                                        <select id="dropdown" className='dropdown'>
-                                            {/* <select id="dropdown" value={selectedValue} onChange={handleSelectChange}> */}
+
+                                        <select id="dropdown" className='dropdown' value={selectedSubjectValue} onChange={handleSelectSubjectChange}>
                                             <option value=" "> Select a Subject </option>
                                             {data.map((item) => (
                                                 <option key={item.id} value={item.id}>
-                                                    {item.name}
+                                                    {item.SubjectName}
                                                 </option>
                                             ))}
                                         </select>

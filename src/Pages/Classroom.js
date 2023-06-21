@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Row, Col, Container, Table } from 'reactstrap';
 import './interface.scss';
-import { FaAsterisk, FaCube, FaSortDown } from 'react-icons/fa';
+import { FaAsterisk, FaCube, FaSortDown, FaTrash, FaEdit } from 'react-icons/fa';
 import AllocateClassroomPopup from './AlllocateClassroom';
 import axios from 'axios';
 import { endpoints } from '../EndPoints';
 
-const Classroom = ({ addClassroom }) => {
+const Classroom = () => {
+    const [classroomid, setClassroomID] = useState('');
     const [classroomname, setClassroomName] = useState('');
-    const [lastname, setLastName] = useState('');
-    const [contactno, setContactNo] = useState('');
-    const [email, setEmail] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [data, setData] = useState([]);
 
@@ -20,18 +18,68 @@ const Classroom = ({ addClassroom }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addClassroom({ classroomname, lastname, contactno, email });
-        setClassroomName('');
-        setLastName('');
-        setContactNo('');
-        setEmail('');
 
+        const data = {
+            ClassroomName: classroomname
+        }
+
+        axios.post(`${endpoints.API_URL}/Classroom`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                console.log(response);
+
+                if (response.status == 200) {
+                    window.location.reload()
+                }
+
+                // Handle successful response
+                //setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+
+        setClassroomName('');
+
+
+    };
+
+    //reset the input fields
+    const resetClassroomInputFields = () => {
+        setClassroomName('');
     };
 
     useEffect(() => {
         fetchData();
+
     }, []);
 
+    //delete student
+    const deleteClassroom = (id) => {
+        axios.delete(`${endpoints.API_URL}/Classroom/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                console.log(response);
+
+                window.location.reload()
+
+                // Handle successful response
+                //setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+    };
+
+    //get all classroom list
     const fetchData = () => {
         axios.get(`${endpoints.API_URL}/Classroom`)
             .then(response => {
@@ -46,6 +94,37 @@ const Classroom = ({ addClassroom }) => {
             });
     }
 
+    //update_one classroom fetch
+    const updateClassroomFetch = (classroom) => {
+        setClassroomID(classroom.ClassroomID);
+        setClassroomName(classroom.ClassroomName);
+    };
+
+    //update classroom 
+    const updateClassroom = (classroom) => {
+        const updatedata = {
+            ClassroomID: classroomid,
+            ClassroomName: classroomname,
+        }
+
+        axios.put(`${endpoints.API_URL}/Classroom`, updatedata, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                console.log(response);
+
+                window.location.reload()
+
+                // Handle successful response
+                //setData(response.data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error(error);
+            });
+    };
 
     return (
 
@@ -77,16 +156,19 @@ const Classroom = ({ addClassroom }) => {
 
                         <Row>
                             <Col md={3}>
-                                <Button className='button' type="submit" color="success">Save</Button>
+                                <Button className='button save' type="submit" >Save</Button>
                             </Col>
-                            <Col md={3}>
+                            {/* <Col md={3}>
                                 <Button className='button' type="button" color="danger">Delete</Button>
+                            </Col> */}
+                            <Col md={3}>
+                                <Button className="button update" type="button"  onClick={updateClassroom}>Update</Button>
                             </Col>
                             <Col md={3}>
-                                <Button className='button' type="button" color="secondary">Reset</Button>
+                                <Button className='button' type="button" onClick={resetClassroomInputFields}>Reset</Button>
                             </Col>
                             <Col md={3}>
-                                <Button className='allocate-button' type="button" color='' onClick={togglePopup}>Allocate classroom</Button>
+                                <Button className='button allocate' type="button" onClick={togglePopup}>Allocate classroom</Button>
                                 <AllocateClassroomPopup isOpen={isOpen} togglePopup={togglePopup} />
                             </Col>
                         </Row>
@@ -110,14 +192,18 @@ const Classroom = ({ addClassroom }) => {
                         <thead>
                             <tr>
                                 <th>Classroom Name</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((classroom, index) => (
-                              
+
                                 <tr key={index}>
                                     <td>{classroom.ClassroomName}</td>
-                                 
+                                    <td>
+                                        <FaTrash className='table-icon' onClick={() => deleteClassroom(classroom.ClassroomID)} />
+                                        <FaEdit className='table-icon' onClick={() => updateClassroomFetch(classroom)} />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

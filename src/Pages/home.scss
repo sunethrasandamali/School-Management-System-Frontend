@@ -1,0 +1,15 @@
+/* Home.css */
+
+.home {
+    display: flex; /* Use flexbox to arrange cards horizontally */
+    flex-wrap: wrap; /* Allow cards to wrap to the next line if needed */
+    justify-content: space-between; /* Distribute cards evenly */
+  }
+  
+  .card-home {
+    width: calc(25% - 10px); /* Adjust the width of each card based on the number of cards you want in a row */
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+  }
+  
