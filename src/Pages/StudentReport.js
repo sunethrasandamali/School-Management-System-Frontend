@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Button, Modal, Card, CardHeader, CardBody, Row, Col, Label, Table, Form, FormGroup, Input } from 'reactstrap';
 import { FaWindowMinimize, FaWindowMaximize, FaWindowClose } from 'react-icons/fa';
 import axios from 'axios';
@@ -6,35 +6,59 @@ import { endpoints } from '../EndPoints';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import './popup.scss'; // Custom styles for the popup
 
-//fetch data to the dropdown list
-// useEffect(() => {
-//     fetchData();
-// }, []);
-
-// const fetchData = async () => {
-//     try {
-//         const response = await axios.get('api_endpoint');
-//         setData(response.data);
-//     } catch (error) {
-//         console.error('Error fetching data:', error);
-//     }
-// };
-
-// const handleSelectChange = (e) => {
-//     setSelectedValue(e.target.value);
-// };
-
-//
-
-
-
-
 
 const StudentReport = ({ isOpen, togglePopup }) => {
+    const [studentid, setStudentID] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+    const [contactperson, setContactPerson] = useState('');
+    const [contactno, setContactNo] = useState('');
+    const [email, setEmail] = useState('');
+    const [dob, setDOB] = useState('');
+    const [age, setAge] = useState();
+    const [classsroom, setClassRoom] = useState('');
+
     const [data, setData] = useState([]);
-    const [selectedValue, setSelectedValue] = useState('');
     const [studentname, setStudentName] = useState('');
 
+    const [selectedStudentValue, setSelectedStudentValue] = useState('');
+
+    useEffect(() => {
+        fetchStudentData();
+    }, []);
+
+    //fetch data to student dropdown list
+    const handleSelectStudentChange = (e) => {
+        setSelectedStudentValue(e.target.value);
+    };
+
+    const fetchStudentData = async () => {
+        try {
+            const response = await axios.get(`${endpoints.API_URL}/Student`);
+            setData(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    //one student fetch in details form
+    const StudentFetch = (student) => {
+        setStudentID(student.StudentID);
+        setFirstName(student.FirstName);
+        setLastName(student.LastName);
+        setContactPerson(student.ContactPerson);
+        setContactNo(student.ContactNo);
+        setEmail(student.SEmail);
+
+        const formattedDOB = student.DOB ? new Date(student.DOB).toISOString().substr(0, 10) : '';
+        setDOB(formattedDOB);
+
+        //setSelectedValue(student.ClassroomID);
+        // console.log('clzid:', student.ClassroomID);
+        // console.log('clzroomdata:', classroomData);
+    };
+
+    //form
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -55,8 +79,8 @@ const StudentReport = ({ isOpen, togglePopup }) => {
                 // Handle error
                 console.error(error);
             });
-            setStudentName('');
-        
+        setStudentName('');
+
     };
 
     return (
@@ -86,15 +110,16 @@ const StudentReport = ({ isOpen, togglePopup }) => {
                                             <FormGroup className='form-group'>
                                                 <Label for="student">Student </Label>
                                                 <br />
-                                                <select id="dropdown" className='dropdown'>
-                                                    {/* <select id="dropdown" value={selectedValue} onChange={handleSelectChange}> */}
+
+                                                <select id="dropdown" value={selectedStudentValue} onChange={handleSelectStudentChange}>
                                                     <option value=" "> Select a Student </option>
                                                     {data.map((item) => (
                                                         <option key={item.id} value={item.id}>
-                                                            {item.name}
+                                                            {item.FirstName}
                                                         </option>
                                                     ))}
                                                 </select>
+
                                             </FormGroup>
                                         </Col>
                                         <Col md={6}>

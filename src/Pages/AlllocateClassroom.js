@@ -7,7 +7,9 @@ import { endpoints } from '../EndPoints';
 import './popup.scss'; // Custom styles for the popup
 
 const AllocateClassroomPopup = ({ isOpen, togglePopup }) => {
-    const [data, setData] = useState([]);
+    const [teacherdata, setTeacherData] = useState([]);
+    const [classroomdata, setClassroomData] = useState([]);
+
     const [selectedTeacherValue, setSelectedTeacherValue] = useState('');
     const [selectedClassroomValue, setSelectedClassroomValue] = useState('');
 
@@ -21,24 +23,24 @@ const AllocateClassroomPopup = ({ isOpen, togglePopup }) => {
         setSelectedTeacherValue(e.target.value);
     };
 
-    const handleSelectClassroomChange = (e) => {
-        setSelectedClassroomValue(e.target.value);
-    }
-
     const fetchTeacherData = async () => {
         try {
             const response = await axios.get(`${endpoints.API_URL}/Teacher`);
-            setData(response.data);
+            setTeacherData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
 
     //fetch data to classroom dropdown list
+    const handleSelectClassroomChange = (e) => {
+        setSelectedClassroomValue(e.target.value);
+    }
+
     const fetchClassroomData = async () => {
         try {
             const response = await axios.get(`${endpoints.API_URL}/Classroom`);
-            setData(response.data);
+            setClassroomData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -72,7 +74,7 @@ const AllocateClassroomPopup = ({ isOpen, togglePopup }) => {
 
                                         <select id="dropdown" className='dropdown' value={selectedTeacherValue} onChange={handleSelectTeacherChange}>
                                             <option value=" "> Select a Teacher </option>
-                                            {data.map((item) => (
+                                            {teacherdata.map((item) => (
                                                 <option key={item.id} value={item.id}>
                                                     {item.FirstName}
                                                 </option>
@@ -99,7 +101,7 @@ const AllocateClassroomPopup = ({ isOpen, togglePopup }) => {
 
                                         <select id="dropdown" className='dropdown' value={selectedClassroomValue} onChange={handleSelectClassroomChange}>
                                             <option value=" "> Select a Classroom </option>
-                                            {data.map((item) => (
+                                            {classroomdata.map((item) => (
                                                 <option key={item.id} value={item.id}>
                                                     {item.ClassroomName}
                                                 </option>

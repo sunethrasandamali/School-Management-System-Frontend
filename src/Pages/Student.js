@@ -125,7 +125,7 @@ const Student = ({ addstudents }) => {
             });
     }
 
-    //fetch data to the dropdown list to input field
+    //fetch data to the classroom dropdown list to input field
     const handleSelectChange = (e) => {
         setSelectedValue(e.target.value);
         console.log("dropvalues:" + e.target.value);
@@ -162,7 +162,7 @@ const Student = ({ addstudents }) => {
             });
     };
 
-    //update student fetch
+    //update_one student fetch
     const updateStudentFetch = (student) => {
         setStudentID(student.StudentID);
         setFirstName(student.FirstName);
@@ -371,7 +371,11 @@ const Student = ({ addstudents }) => {
                                 <th>Last Name</th>
                                 <th>Contact Person</th>
                                 <th>Contact No</th>
+                                <th>Email</th>
+                                <th>Date of Birth</th>
+                                <th>Age</th>
                                 <th>Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -382,6 +386,9 @@ const Student = ({ addstudents }) => {
                                     <td>{student.LastName}</td>
                                     <td>{student.ContactPerson}</td>
                                     <td>{student.ContactNo}</td>
+                                    <td>{student.SEmail}</td>
+                                    <td>{new Date(student.DOB).toLocaleDateString()}</td>
+                                    <td>{student.Age}</td>
                                     <td>
                                         <FaTrash className='table-icon' onClick={() => deleteStudent(student.StudentID)} />
                                         <FaEdit className='table-icon' onClick={() => updateStudentFetch(student)} />
